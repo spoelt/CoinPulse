@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">CoinPulse</string>
+    <string name="search_bar_label">Search</string>
+    <string name="search_icon_content_desc">Search icon</string>
+    <string name="change_icon_content_desc">Change icon</string>
+    <string name="empty_state_content_desc">Empty state image</string>
+    <string name="empty_state_message">No data found</string>
+    <string name="empty_state_refresh_action">Refresh</string>
+    <string name="error_image_content_desc">Error image</string>
+    <string name="error_message">Oh no, an error occurred :/</string>
+    <string name="error_retry_action">Retry</string>
+    <string name="error_network_connection_title">No internet connection available.</string>
+    <string name="error_network_connection_desc">Refreshing data will resume once network is available again.</string>
+    <string name="no_network_connection_icon_content_desc">No network connection icon</string>
+</resources>
