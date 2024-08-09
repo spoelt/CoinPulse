@@ -29,8 +29,10 @@ object CoinNameDeserializer {
     ): Map<String, String>? {
         if (jsonArray == null || jsonArray.none { it.isJsonArray }) return null
 
-        val mappedCoinInfos = jsonArray.map { element ->
-            mapJsonElement(element, abbreviatedNames)
+        val mappedCoinInfos = jsonArray.flatMap { element ->
+            element.asJsonArray.map { innerElement ->
+                mapJsonElement(innerElement, abbreviatedNames)
+            }
         }
 
         return if (mappedCoinInfos.all { it == null }) {

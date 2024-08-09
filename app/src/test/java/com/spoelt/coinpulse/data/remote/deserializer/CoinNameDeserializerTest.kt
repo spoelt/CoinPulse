@@ -26,12 +26,12 @@ class CoinNameDeserializerTest {
 
     @Test
     fun `deserializeJsonArray parses valid JSON with matching abbreviated names correctly`() {
-        val jsonString = """
+        val jsonString = """[
             [
                 ["BTC", "Bitcoin"],
                 ["ETH", "Ethereum"]
             ]
-        """
+        ]"""
         val jsonArray = JsonParser.parseString(jsonString).asJsonArray
         val abbreviatedNames = listOf("BTC", "ETH")
 
@@ -43,12 +43,12 @@ class CoinNameDeserializerTest {
 
     @Test
     fun `deserializeJsonArray returns empty map for JSON with non-matching abbreviated names`() {
-        val jsonString = """
+        val jsonString = """[
             [
                 ["BTC", "Bitcoin"],
                 ["ETH", "Ethereum"]
             ]
-        """
+        ]"""
         val jsonArray = JsonParser.parseString(jsonString).asJsonArray
         val abbreviatedNames = listOf("LTC", "XRP")
 
@@ -71,12 +71,12 @@ class CoinNameDeserializerTest {
 
     @Test
     fun `deserializeJsonArray does not consider arrays with partial data`() {
-        val jsonString = """
+        val jsonString = """[
             [
                 ["BTC", "Bitcoin"],
                 ["ETH"]
             ]
-        """
+        ]"""
         val jsonArray = JsonParser.parseString(jsonString).asJsonArray
         val result = CoinNameDeserializer.deserializeJsonArray(jsonArray, listOf("BTC", "ETH"))
         val expected = mapOf(Pair("BTC", "Bitcoin"))
@@ -85,11 +85,11 @@ class CoinNameDeserializerTest {
 
     @Test
     fun `deserializeJsonArray returns null for JSON with empty nested arrays`() {
-        val jsonString = """
+        val jsonString = """[
             [
                 []
             ]
-        """
+        ]"""
         val jsonArray = JsonParser.parseString(jsonString).asJsonArray
         val result = CoinNameDeserializer.deserializeJsonArray(jsonArray, listOf("BTC", "ETH"))
         assertNull(result)
@@ -97,12 +97,12 @@ class CoinNameDeserializerTest {
 
     @Test
     fun `deserializeJsonArray handles extra data in JSON arrays gracefully`() {
-        val jsonString = """
+        val jsonString = """[
             [
                 ["BTC", "Bitcoin", "extra"],
                 ["ETH", "Ethereum"]
             ]
-        """
+        ]"""
         val jsonArray = JsonParser.parseString(jsonString).asJsonArray
         val abbreviatedNames = listOf("BTC", "ETH")
 
@@ -114,12 +114,12 @@ class CoinNameDeserializerTest {
 
     @Test
     fun `deserializeJsonArray handles all fields missing gracefully`() {
-        val jsonString = """
+        val jsonString = """[
             [
                 [null, null],
                 [null, null]
             ]
-        """
+        ]"""
         val jsonArray = JsonParser.parseString(jsonString).asJsonArray
         val result = CoinNameDeserializer.deserializeJsonArray(jsonArray, listOf("BTC", "ETH"))
         assertNull(result)
@@ -127,12 +127,12 @@ class CoinNameDeserializerTest {
 
     @Test
     fun `deserializeJsonArray handles type casting errors gracefully`() {
-        val jsonString = """
+        val jsonString = """[
             [
                 ["BTC", 12345],
                 ["ETH", "Ethereum"]
             ]
-        """
+        ]"""
         val jsonArray = JsonParser.parseString(jsonString).asJsonArray
         val abbreviatedNames = listOf("BTC", "ETH")
 
@@ -144,12 +144,12 @@ class CoinNameDeserializerTest {
 
     @Test
     fun `deserializeJsonArray returns empty map when no matching symbols in filter`() {
-        val jsonString = """
+        val jsonString = """[
             [
                 ["BTC", "Bitcoin"],
                 ["ETH", "Ethereum"]
             ]
-        """
+        ]"""
         val jsonArray = JsonParser.parseString(jsonString).asJsonArray
         val abbreviatedNames = listOf<String>()
 
