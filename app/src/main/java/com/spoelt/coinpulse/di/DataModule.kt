@@ -43,6 +43,7 @@ object DataModule {
         install(ContentNegotiation) {
             gson {
                 serializeSpecialFloatingPointValues()
+                setLenient()
             }
         }
     }
