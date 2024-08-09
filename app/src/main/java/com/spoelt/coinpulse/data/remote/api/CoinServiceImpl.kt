@@ -7,13 +7,13 @@ import com.spoelt.coinpulse.data.remote.deserializer.CoinNameDeserializer
 import com.spoelt.coinpulse.data.remote.deserializer.TickerDeserializer
 import com.spoelt.coinpulse.data.remote.model.TickerDto
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.RedirectResponseException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.url
-import io.ktor.client.statement.bodyAsText
 import io.ktor.utils.io.errors.IOException
 
 class CoinServiceImpl(
@@ -21,21 +21,18 @@ class CoinServiceImpl(
 ) : CoinService {
     override suspend fun fetchTickers(symbols: String): Result<List<TickerDto>?> {
         return safeApiCall {
-            val responseJsonString = client.get {
+            val response = client.get {
                 url(TICKERS)
                 parameter(SYMBOLS_KEY, symbols)
-            }.bodyAsText()
-
-            TickerDeserializer.deserializeJsonString(responseJsonString)
+            }
+            TickerDeserializer.deserializeJsonArray(response.body())
         }
     }
 
     override suspend fun fetchCoinDisplayNames(abbreviatedNames: List<String>): Result<Map<String, String>?> {
         return safeApiCall {
-            val responseJsonString = client.get(CURRENCY_LABELS).bodyAsText()
-
-            CoinNameDeserializer.deserializeJsonString(responseJsonString)
-                ?.filterKeys { key -> abbreviatedNames.contains(key) }
+            val response = client.get(CURRENCY_LABELS)
+            CoinNameDeserializer.deserializeJsonArray(response.body(), abbreviatedNames)
         }
     }
 
